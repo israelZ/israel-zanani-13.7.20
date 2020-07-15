@@ -1,0 +1,49 @@
+<h2 mat-mat-dialog-title>Add task</h2>
+<mat-dialog-content>
+    <form [formGroup]="newTaskForm"  (ngSubmit)="onSubmit()">
+        <div style="display: flex; flex-direction: column;">
+            
+            <div class="from-inline">
+                <i class="far fa-user pr-2" style="font-size: medium;"></i>
+                <mat-form-field>
+                    <mat-label>
+                        Name
+                    </mat-label>
+                    <input matInput formControlName="name">
+                </mat-form-field>
+            </div>
+
+            <div class="from-inline">
+                <i class="las la-at pr-2" style="font-size: medium;"></i>
+                <mat-form-field>
+                    <mat-label>
+                        Email
+                    </mat-label>
+                    <input matInput formControlName="mail">
+                </mat-form-field>
+            </div>
+
+            <div class="from-inline">
+                <i class="las la-phone-volume pr-2" style="font-size: medium;"></i>
+                <mat-form-field>
+                    <mat-label>
+                        Phone
+                    </mat-label>
+                    <input matInput formControlName="phone">
+                </mat-form-field>
+            </div>
+
+            <mat-form-field>
+                <mat-label>
+                    Description
+                </mat-label>
+                <textarea rows="6" matInput placeholder="Ex. It makes me feel..." formControlName="content"></textarea>
+            </mat-form-field>
+        </div>
+
+        <button mat-raised-button color="primary" type="submit">submit</button>
+    </form>
+
+
+
+</mat-dialog-content>

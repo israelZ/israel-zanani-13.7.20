@@ -1,0 +1,160 @@
+<div class="bg">
+<mat-toolbar style="justify-content: space-between;" color="primary">
+  <div class="d-none d-sm-block">
+    <button mat-raised-button (click)="addTask()">
+      <i class="las la-plus" style="font-size: medium;"></i> New Task
+    </button>
+  </div>
+  <div class="d-block d-sm-none">
+    <mat-menu #MatMenu="matMenu">
+      <button mat-menu-item (click)="addTask()">
+        <i class="las la-plus" style="font-size: medium;"></i> New Task
+      </button>
+    </mat-menu>
+    <div >
+      <button mat-raised-button [matMenuTriggerFor]="MatMenu">
+        <i class="fas fa-ellipsis-v" style="font-size: medium;"></i>
+      </button>
+    </div>
+  </div>
+
+  <div>
+    <span class="h6" (click)="logout()" style="cursor: pointer;"> Log out <i class="las la-sign-out-alt" style="font-size: x-large;"></i></span>
+  </div>
+</mat-toolbar>
+
+<div class="mt-4 ml-5 form-inline" >
+  
+  <i class="las la-search pr-3" style="font-size: x-large;"></i>
+  <mat-form-field>
+    <input matInput placeholder="Filter" (keyup)="applyFilter($event.target.value)">
+  </mat-form-field>
+</div>
+
+<div class="d-none d-sm-block">
+  <div class="mat-elevation-z8 mx-5">
+    <mat-table [dataSource]="dataSource" class="mat-elevation-z8 bg-t text-white">
+      <!-- Name Column -->
+      <ng-container matColumnDef="Name">
+        <mat-header-cell *matHeaderCellDef class="text-white"><i class="far fa-user pr-2" style="font-size: medium;"></i> Name
+        </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="text-white">{{element.name}} </mat-cell>
+      </ng-container>
+
+      <!-- Email Column -->
+      <ng-container matColumnDef="Email">
+        <mat-header-cell *matHeaderCellDef class="text-white"> <i class="las la-at pr-2" style="font-size: medium;"></i> Email
+        </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="text-white"> {{element.mail}} </mat-cell>
+      </ng-container>
+
+      <!-- Phone Column -->
+      <ng-container matColumnDef="Phone">
+        <mat-header-cell *matHeaderCellDef class="text-white"><i class="las la-phone-volume pr-2" style="font-size: medium;"></i> Phone
+        </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="text-white"> 0{{element.phone}} </mat-cell>
+      </ng-container>
+
+      <!-- Data Column -->
+      <ng-container matColumnDef="Data">
+        <mat-header-cell *matHeaderCellDef class="text-white"> <i class="lar la-calendar pr-2" style="font-size: medium;"></i> Data
+        </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="text-white"> {{parsDare(element.data)}} </mat-cell>
+      </ng-container>
+
+      <!-- Options Column -->
+
+      <ng-container matColumnDef="Options">
+        <mat-header-cell *matHeaderCellDef class="text-white"> Options </mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <span class="d-none d-lg-block">
+            <button (click)="edit(element)" class="btn btn-primary mr-2 ml-1"><i
+                class="las la-pen"></i></button>
+            <button (click)="watching(element)" class="btn btn-success"><i class="las la-eye"></i></button>
+            <button (click)="remove(element.id_task)" class="btn btn-danger ml-2"><i
+                class="las la-trash-alt"></i></button>
+          </span>
+          <span class="d-block d-lg-none">
+
+            <mat-menu #MatMenuModule="matMenu">
+              <div mat-menu-item (click)="edit(element)">
+                <i class="las la-pen"></i> edit
+              </div>
+              <div mat-menu-item (click)="watching(element)">
+                <i class="las la-eye"></i> Watching
+              </div>
+              <div mat-menu-item (click)="remove(element.id_task)">
+                <i class="las la-trash-alt"></i> Remove
+              </div>
+            </mat-menu>
+            <div class="p-3">
+              <button color="primary" mat-mini-fab [matMenuTriggerFor]="MatMenuModule">
+                <i class="las la-bars"></i>
+              </button>
+            </div>
+
+          </span>
+
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+    <mat-paginator class="text-white" style="background-color:  rgb(115, 136, 255,0.3);" [pageSizeOptions]=[2,5,10,20] showFirstLastButtons></mat-paginator>
+  </div>
+</div>
+
+
+<span class="d-block d-sm-none">
+  <div class="mat-elevation-z8 mx-3">
+    <mat-table [dataSource]="dataSourceSm" class="mat-elevation-z8 bg-t">
+      <!-- Name Column -->
+      <ng-container matColumnDef="Name">
+        <mat-header-cell *matHeaderCellDef class="text-white"><i class="far fa-user pr-2" style="font-size: medium;"></i> Name
+        </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="text-white"> {{element.name}} </mat-cell>
+      </ng-container>
+
+      <!-- Email Column -->
+      <ng-container matColumnDef="Email">
+        <mat-header-cell *matHeaderCellDef class="text-white"> <i class="las la-at pr-2" style="font-size: medium;"></i> Email
+        </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="text-white"> {{element.mail}} </mat-cell>
+      </ng-container>
+
+      <!-- Options Column -->
+
+      <ng-container matColumnDef="Options">
+        <mat-header-cell *matHeaderCellDef class="ml-5 pl-4" class="text-white"> Options </mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <span class="d-block d-lg-none">
+
+            <mat-menu #MatMenuModule="matMenu">
+              <div mat-menu-item (click)="edit(element)">
+                <i class="las la-pen"></i> edit
+              </div>
+              <div mat-menu-item (click)="watching(element)">
+                <i class="las la-eye"></i> Watching
+              </div>
+              <div mat-menu-item (click)="remove(element.id_task)">
+                <i class="las la-trash-alt"></i> Remove
+              </div>
+            </mat-menu>
+            <div class="ml-4 my-2">
+              <button color="primary" mat-mini-fab [matMenuTriggerFor]="MatMenuModule">
+                <i class="las la-bars"></i>
+              </button>
+            </div>
+
+          </span>
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumnsSm"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumnsSm;"></mat-row>
+    </mat-table>
+    <mat-paginator class="text-white" style="background-color:  rgb(115, 136, 255,0.3);" [pageSizeOptions]=[2,5,10,20] showFirstLastButtons></mat-paginator>
+  </div>
+</span>
+</div>
